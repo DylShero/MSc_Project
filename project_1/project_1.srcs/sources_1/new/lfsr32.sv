@@ -3,7 +3,7 @@
 module lfsr32 #(
     parameter int unsigned      WIDTH        = 32,
     parameter logic [31:0]      POLY         = 32'h8020_0003,  // taps 32,22,2,1
-    parameter logic [31:0]      SEED_DEFAULT = 32'hDEAD_BEEF   // never all-zero
+    parameter logic [31:0]      SEED_DEFAULT = 32'hAAAA_AAAA  // never all-zero
 ) (
     input  logic              clk,
     input  logic              rst,       // synchronous, active-high
