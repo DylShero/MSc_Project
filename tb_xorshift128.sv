@@ -10,7 +10,7 @@ module tb_xorshift128;
     xorshift128 dut (.clk(clk), .rst(rst), .en(en), .load(load),
                      .seed_in(seed_in), .rnd_out(rnd_out));
 
-    always #5 clk = ~clk;
+    always #5 clk = ~clk; //Delay by 5ns
 
     initial begin
         $readmemh("expected_xorshift.hex", expected);
@@ -23,7 +23,7 @@ module tb_xorshift128;
             @(posedge clk); #1;
             if (rnd_out !== expected[k]) begin
                 errors = errors + 1;
-                $display("  MISMATCH k=%0d  hw=%08x  golden=%08x", k, rnd_out, expected[k]);
+                $display("  MISMATCH k=%0d  hw=%08x  baseline=%08x", k, rnd_out, expected[k]);
             end
         end
         if (errors == 0) $display(">>> PASS: all %0d words match baseline <<<", N);
