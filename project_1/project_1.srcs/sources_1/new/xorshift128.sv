@@ -9,11 +9,11 @@ module xorshift128 #(
     input  logic          rst,       // synchronous, active-high
     input  logic          en,        // advance one word when high
     input  logic          load,      // load seed_in this cycle (overrides en)
-    input  logic [127:0]  seed_in,   // starting state {x,y,z,w}, x in MSBs (from CPU)
+    input  logic [127:0]  seed_in,   // starting state {x,y,z,w}, x in MSBs down to w in LSBs (from CPU)
     output logic [31:0]   rnd_out    // current w
 );
  
-    // One xorshift128 step. from the current state at once, so it is one clock.
+    // One xorshift128 step. from the current state at once, so it is one clock cycle
     //  t = x ^ (x<<11);  new x=y; y=z; z=w;  new w = w ^ (w>>19) ^ (t ^ (t>>8))
     function automatic logic [127:0] xs_step(input logic [127:0] s);
         logic [31:0] x, y, z, w, t, nw;
@@ -23,7 +23,7 @@ module xorshift128 #(
         return {y, z, w, nw};
     endfunction
  
-    // Lock-up guard: the all-zero 128-bit state stays zero forever.
+    // Lock-up guard - the all-zero 128-bit state stays zero forever.
     // Recovers by setting x = 1.
     function automatic logic [127:0] nonzero(input logic [127:0] s);
         return (s == 128'd0) ? {32'h1, 96'h0} : s;
